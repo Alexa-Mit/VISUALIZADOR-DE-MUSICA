@@ -1,0 +1,68 @@
+//Creacion de un visualizador de audio
+
+//Variables a b
+float a;
+float b;
+ 
+//Importar musica usando Minim 
+import ddf.minim.*;
+import ddf.minim.signals.*;
+
+Minim minim;
+AudioPlayer musica;
+
+void setup () {
+//fullScreen(P3D); para renderizar, 1280x720 para visualizar:
+  size(1280,720);
+//Sin cursor en la pantalla   
+  noCursor();
+//Suavizar los bordes de toda la geometría   
+  smooth();
+//fondo negro  
+  background (0);
+//fotogramas por segundo  
+  frameRate(24);
+
+//añadir pista de audio 
+  minim = new Minim(this);
+  musica = minim.loadFile("Carnival.mp3"); 
+  musica.play();
+}
+  
+void draw () {
+ 
+  fill(0,50);  
+  noStroke();
+  rect(0, 0, width, height);
+  translate(width/2, height/2);
+ 
+ for (int i = 0; i < musica.bufferSize() - 1; i++) {
+ 
+ float angulo = sin(i+a)* 5; //10
+ float angulo2 = sin(i+b)* 200; //300
+ 
+ float x = sin(radians(i))*(angulo2+30); 
+ float y = cos(radians(i))*(angulo2+30);
+ 
+ float x3 = sin(radians(i))*(500/angulo); 
+ float y3 = cos(radians(i))*(500/angulo);
+ 
+//Color y forma
+fill (#000000, 255); 
+ ellipse(x, y, musica.left.get(i)*10, musica.left.get(i)*20);
+ 
+fill (117, 101, 255); 
+ rect(x3, y3, musica.left.get(i)*20, musica.left.get(i)*10);
+ 
+fill (216, 0, 255);
+ rect(x, y, musica.right.get(i)*10, musica.left.get(i)*10);
+ 
+fill(194, 246, 255);
+ ellipse(x3, y3, musica.right.get(i)*10, musica.right.get(i)*20);
+  }
+
+//Intervalo
+  a += 0.01;
+  b += 0.05;
+ 
+}

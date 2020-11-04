@@ -1,0 +1,67 @@
+//Creacion de un visualizador de audio
+
+//Variables a b
+float a;
+float b;
+ 
+//Importar musica usando Minim 
+import ddf.minim.*;
+import ddf.minim.signals.*;
+
+Minim minim;
+AudioPlayer musica;
+
+void setup () {
+//fullScreen(P3D); para renderizar, 1280x720 para visualizar:
+  size(1280,720);
+//Sin cursor en la pantalla   
+  noCursor();
+//Suavizar los bordes de toda la geometría   
+  smooth();
+//fondo negro  
+  background (0);
+//fotogramas por segundo  
+  frameRate(24);
+
+//añadir pista de audio 
+  minim = new Minim(this);
+  musica = minim.loadFile("Berlin.mp3"); 
+  musica.play();
+}
+  
+void draw () {
+ 
+  fill(0,50);  
+  noStroke();
+  rect(0, 0, width, height);
+  translate(width/2, height/2);
+ 
+  for (int i = 0; i < musica.bufferSize() - 1; i++) {
+ 
+ float angle = sin(i+a)* 10; 
+ float angle2 = sin(i+b)* 300; 
+ 
+ float x = sin(radians(i))*(angle2+30); 
+ float y = cos(radians(i))*(angle2+30);
+ 
+ float x3 = sin(radians(i))*(500/angle); 
+ float y3 = cos(radians(i))*(500/angle);
+ 
+fill (#000000, 90); //yellow
+ ellipse(x, y, musica.left.get(i)*10, musica.left.get(i)*10);
+ 
+fill ( #ffffff, 60); //wt
+ rect(x3, y3, musica.left.get(i)*20, musica.left.get(i)*10);
+ 
+fill ( #ff9800  , 90); //orange
+ rect(x, y, musica.right.get(i)*10, musica.left.get(i)*10);
+ 
+ 
+fill( #ffffff , 70); //wt
+ rect(x3, y3, musica.right.get(i)*10, musica.right.get(i)*20);
+  }
+ 
+  a += 0.01;
+  b += 0.05;
+ 
+}
